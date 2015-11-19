@@ -1,0 +1,81 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+
+    "VogelsLambdaRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version" : "2012-10-17",
+          "Statement": [ {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [ "lambda.amazonaws.com" ]
+            },
+            "Action": [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Path": "/"
+      }
+    },
+
+    "VogelsLambdaPolicies": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "DynamoDBAccessPolicy",
+        "PolicyDocument": {
+          "Version" : "2012-10-17",
+          "Statement": [ {
+            "Effect": "Allow",
+            "Action": [
+              "dynamodb:BatchGetItem",
+              "dynamodb:BatchWriteItem",
+              "dynamodb:CreateTable",
+              "dynamodb:DeleteItem",
+              "dynamodb:DescribeStream",
+              "dynamodb:DescribeTable",
+              "dynamodb:GetItem",
+              "dynamodb:GetRecords",
+              "dynamodb:GetShardIterator",
+              "dynamodb:ListStreams",
+              "dynamodb:ListTables",
+              "dynamodb:PutItem",
+              "dynamodb:Query",
+              "dynamodb:Scan",
+              "dynamodb:UpdateItem",
+              "dynamodb:UpdateTable"
+            ],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": ["lambda:InvokeFunction"],
+            "Resource": "*"
+          },
+          {
+            "Effect": "Allow",
+            "Action": [
+              "dynamodb:DescribeStream",
+              "dynamodb:GetRecords",
+              "dynamodb:GetShardIterator",
+              "dynamodb:ListStreams",
+              "logs:CreateLogGroup",
+              "logs:CreateLogStream",
+              "logs:PutLogEvents"
+            ],
+            "Resource": "*"
+          }]
+        },
+        "Roles": [ {
+          "Ref": "VogelsLambdaRole"
+        } ]
+      }
+    }
+  },
+  "Outputs" : {
+    "RoleArn" : {
+      "Value" : {"Fn::GetAtt" : ["VogelsLambdaRole", "Arn"] },
+      "Description" : "Arn for the new vogels lambda role"
+    }
+  }
+}
