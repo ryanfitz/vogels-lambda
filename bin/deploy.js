@@ -203,5 +203,9 @@ async.waterfall([
   async.apply(internals.createLambdaFunction, internals.lambdaConfig),
   async.apply(internals.initDatabase),
 ], function (err, result) {
-  console.log('finished', err, JSON.stringify(result, null, 2));
+  if (err) {
+    console.error('Deploy failed', err);
+  } else {
+    console.log('Deploy finished, run `make invoke`');
+  }
 });
