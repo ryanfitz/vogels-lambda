@@ -20,3 +20,7 @@ lib-cov
 *.swn
 tmp/
 .tern-port
+./*.tfstate
+terraform.tfplan
+terraform.tfstate
+terraform.tfstate.backup
